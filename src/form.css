@@ -1,0 +1,118 @@
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.list-item input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.list-item button {
+  padding: 5px 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.list-item button:hover {
+  background-color: #e60000;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.preview-container {
+  margin-top: 20px;
+}
+
+.preview-button,
+.download-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.preview-button:hover,
+.download-button:hover {
+  background-color: #45a049;
+}
+
+.preview-content {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #ffffff; /* White background for simplicity */
+  font-family: Arial, sans-serif; /* Use ATS-friendly fonts */
+}
+
+.preview-content h1 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.preview-content h2 {
+  font-size: 1.2em;
+  margin-top: 20px;
+}
+
+.preview-content ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.preview-content hr {
+  border: 1px solid #ccc;
+  margin: 20px 0;
+}
