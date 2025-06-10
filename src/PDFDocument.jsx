@@ -28,9 +28,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 12,
     marginBottom: 8,
+    fontWeight: 'bold',
   },
   list: {
     marginLeft: 20,
+  },
+  item: {
+    marginBottom: 8,
+  },
+  itemTitle: {
+    fontWeight: 'bold',
+  },
+  itemDescription: {
+    fontSize: 9,
+    color: '#4b5563',
+    marginTop: 2,
   },
 });
 
@@ -71,10 +83,15 @@ const PDFDocument = ({ formData }) => {
 
         {/* Educations Section */}
         <View style={styles.section}>
-          <Text style={styles.title}>Educations</Text>
+          <Text style={styles.title}>Education</Text>
           <View style={styles.list}>
             {formData.educations.map((edu, index) => (
-              <Text key={index}>- {edu}</Text>
+              <View key={index} style={styles.item}>
+                <Text style={styles.itemTitle}>- {edu.title}</Text>
+                {edu.description && (
+                  <Text style={styles.itemDescription}>{edu.description}</Text>
+                )}
+              </View>
             ))}
           </View>
         </View>
@@ -84,7 +101,12 @@ const PDFDocument = ({ formData }) => {
           <Text style={styles.title}>Certifications</Text>
           <View style={styles.list}>
             {formData.certifications.map((cert, index) => (
-              <Text key={index}>- {cert}</Text>
+              <View key={index} style={styles.item}>
+                <Text style={styles.itemTitle}>- {cert.title}</Text>
+                {cert.description && (
+                  <Text style={styles.itemDescription}>{cert.description}</Text>
+                )}
+              </View>
             ))}
           </View>
         </View>
@@ -94,7 +116,12 @@ const PDFDocument = ({ formData }) => {
           <Text style={styles.title}>Achievements</Text>
           <View style={styles.list}>
             {formData.achievements.map((ach, index) => (
-              <Text key={index}>- {ach}</Text>
+              <View key={index} style={styles.item}>
+                <Text style={styles.itemTitle}>- {ach.title}</Text>
+                {ach.description && (
+                  <Text style={styles.itemDescription}>{ach.description}</Text>
+                )}
+              </View>
             ))}
           </View>
         </View>

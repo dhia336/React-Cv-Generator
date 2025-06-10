@@ -27,18 +27,39 @@ const PreviewPDF = ({ formData }) => {
           </section>
           <hr style="margin: 16px 0; border: 1px solid #ccc;" />
           <section>
-            <h2 style="font-size:1em; margin-bottom: 8px;">Educations</h2>
-            <ul style="margin: 0; padding-left: 20px;">${formData.educations.filter(Boolean).map(edu => `<li>${edu}</li>`).join('')}</ul>
+            <h2 style="font-size:1em; margin-bottom: 8px;">Education</h2>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${formData.educations.filter(Boolean).map(edu => `
+                <li style="margin-bottom: 8px;">
+                  <strong>${edu.title}</strong>
+                  ${edu.description ? `<div style="color: #4b5563; font-size: 0.9em; margin-top: 2px;">${edu.description}</div>` : ''}
+                </li>
+              `).join('')}
+            </ul>
           </section>
           <hr style="margin: 16px 0; border: 1px solid #ccc;" />
           <section>
             <h2 style="font-size:1em; margin-bottom: 8px;">Certifications</h2>
-            <ul style="margin: 0; padding-left: 20px;">${formData.certifications.filter(Boolean).map(cert => `<li>${cert}</li>`).join('')}</ul>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${formData.certifications.filter(Boolean).map(cert => `
+                <li style="margin-bottom: 8px;">
+                  <strong>${cert.title}</strong>
+                  ${cert.description ? `<div style="color: #4b5563; font-size: 0.9em; margin-top: 2px;">${cert.description}</div>` : ''}
+                </li>
+              `).join('')}
+            </ul>
           </section>
           <hr style="margin: 16px 0; border: 1px solid #ccc;" />
           <section>
             <h2 style="font-size:1em; margin-bottom: 8px;">Achievements</h2>
-            <ul style="margin: 0; padding-left: 20px;">${formData.achievements.filter(Boolean).map(ach => `<li>${ach}</li>`).join('')}</ul>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${formData.achievements.filter(Boolean).map(ach => `
+                <li style="margin-bottom: 8px;">
+                  <strong>${ach.title}</strong>
+                  ${ach.description ? `<div style="color: #4b5563; font-size: 0.9em; margin-top: 2px;">${ach.description}</div>` : ''}
+                </li>
+              `).join('')}
+            </ul>
           </section>
         </div>
       `;
