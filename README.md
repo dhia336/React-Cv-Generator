@@ -30,7 +30,7 @@ A modern, responsive web application for creating professional CVs with a clean 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/cv-generator.git
+git clone https://github.com/dhia336/React-Cv-Generator.git
 cd cv-generator
 ```
 
