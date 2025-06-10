@@ -46,24 +46,39 @@ const PreviewPDF = ({ formData }) => {
     }
   }, [formData]);
 
-  const downloadPDF = () => {
+  const downloadPDF = async () => {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
     });
 
-    const container = document.createElement('div');
-    container.innerHTML = previewContent;
+    // Get the actual preview content element
+    const previewElement = document.querySelector('.preview-content > div');
+    if (!previewElement) {
+      console.error('Preview element not found');
+      return;
+    }
 
-    doc.html(container, {
-      callback: (doc) => {
-        doc.save(`${formData.name}_CV.pdf`);
-      },
-      x: 10,
-      y: 10,
-      width: 190, // Fit content within A4 width
-    });
+    try {
+      await doc.html(previewElement, {
+        callback: (doc) => {
+          doc.save(`${formData.name}_CV.pdf`);
+        },
+        x: 10,
+        y: 10,
+        width: 170,
+        windowWidth: 794,
+        html2canvas: {
+          scale: 0.5,
+          useCORS: true,
+          logging: true,
+          backgroundColor: '#ffffff',
+        },
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   };
 
   return (
