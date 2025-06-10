@@ -8,10 +8,11 @@ const Form = ({ onSubmit }) => {
     phone: '',
     email: '',
     location: '',
+    github: '',
     technicalSkills: [''],
-    educations: [{ title: '', description: '' }],
-    certifications: [{ title: '', description: '' }],
-    achievements: [{ title: '', description: '' }],
+    educations: [{ title: '', descriptions: [''] }],
+    certifications: [{ title: '', descriptions: [''] }],
+    achievements: [{ title: '', descriptions: [''] }]
   });
 
   const [errors, setErrors] = useState({});
@@ -34,206 +35,277 @@ const Form = ({ onSubmit }) => {
     return newErrors;
   };
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
-  };
-
-  const handleListChange = (name, index, field, value) => {
-    const updatedList = [...formData[name]];
-    if (name === 'technicalSkills') {
-      updatedList[index] = value;
-    } else {
-      updatedList[index] = { ...updatedList[index], [field]: value };
-    }
-    setFormData({ ...formData, [name]: updatedList });
-  };
-
-  const handleAddItem = (name) => {
-    const newItem = name === 'technicalSkills' ? '' : { title: '', description: '' };
-    setFormData({ ...formData, [name]: [...formData[name], newItem] });
-  };
-
-  const handleRemoveItem = (name, index) => {
-    const updatedList = formData[name].filter((_, i) => i !== index);
-    setFormData({ ...formData, [name]: updatedList });
-  };
-
-  const toggleDescription = (name, index) => {
-    const key = `${name}-${index}`;
-    setExpandedItems(prev => ({
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
       ...prev,
-      [key]: !prev[key]
+      [name]: value
     }));
   };
 
-  const renderDescriptionField = (name, index, item) => {
-    const key = `${name}-${index}`;
-    const isExpanded = expandedItems[key];
-    const hasDescription = item.description && item.description.trim() !== '';
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData(prev => ({
+        ...prev,
+        image: file
+      }));
+    }
+  };
 
-    return (
-      <div className="description-container">
-        {!isExpanded && !hasDescription && (
-          <button
-            type="button"
-            onClick={() => toggleDescription(name, index)}
-            className="add-description-button"
-          >
-            + Add Description
-          </button>
-        )}
-        {(isExpanded || hasDescription) && (
-          <div className="description-field">
-            <textarea
-              value={item.description}
-              onChange={(e) => handleListChange(name, index, 'description', e.target.value)}
-              placeholder={`Enter ${name.slice(0, -1)} description (optional)`}
-              className="description-input"
-            />
-            <button
-              type="button"
-              onClick={() => toggleDescription(name, index)}
-              className="toggle-description-button"
-            >
-              {isExpanded ? 'Hide' : 'Show'} Description
-            </button>
-          </div>
-        )}
-      </div>
-    );
+  const handleListChange = (index, value, listName) => {
+    setFormData(prev => ({
+      ...prev,
+      [listName]: prev[listName].map((item, i) =>
+        i === index ? value : item
+      )
+    }));
+  };
+
+  const handleTitleChange = (index, value, listName) => {
+    setFormData(prev => ({
+      ...prev,
+      [listName]: prev[listName].map((item, i) =>
+        i === index ? { ...item, title: value } : item
+      )
+    }));
+  };
+
+  const handleDescriptionChange = (index, descIndex, value, listName) => {
+    setFormData(prev => ({
+      ...prev,
+      [listName]: prev[listName].map((item, i) =>
+        i === index ? {
+          ...item,
+          descriptions: item.descriptions.map((desc, j) =>
+            j === descIndex ? value : desc
+          )
+        } : item
+      )
+    }));
+  };
+
+  const addListItem = (listName) => {
+    setFormData(prev => ({
+      ...prev,
+      [listName]: [...prev[listName], listName === 'technicalSkills' ? '' : { title: '', descriptions: [''] }]
+    }));
+  };
+
+  const removeListItem = (index, listName) => {
+    setFormData(prev => ({
+      ...prev,
+      [listName]: prev[listName].filter((_, i) => i !== index)
+    }));
+  };
+
+  const addDescription = (index, listName) => {
+    setFormData(prev => ({
+      ...prev,
+      [listName]: prev[listName].map((item, i) =>
+        i === index ? {
+          ...item,
+          descriptions: [...item.descriptions, '']
+        } : item
+      )
+    }));
+  };
+
+  const removeDescription = (index, descIndex, listName) => {
+    setFormData(prev => ({
+      ...prev,
+      [listName]: prev[listName].map((item, i) =>
+        i === index ? {
+          ...item,
+          descriptions: item.descriptions.filter((_, j) => j !== descIndex)
+        } : item
+      )
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
   };
 
   return (
-    <form className="form-container">
+    <form onSubmit={handleSubmit} className="form-container">
       <div className="form-group">
-        <label htmlFor="image">Profile Image:</label>
+        <label>Profile Picture</label>
         <input
           type="file"
-          id="image"
-          name="image"
           accept="image/*"
-          onChange={handleChange}
-          className="file-input"
+          onChange={handleImageChange}
+          className="image-input"
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="name">Full Name:</label>
+        <label>Name</label>
         <input
           type="text"
-          id="name"
           name="name"
           value={formData.name}
-          onChange={handleChange}
-          placeholder="John Doe"
+          onChange={handleInputChange}
           className="title-input"
+          required
         />
-        {errors.name && <span className="error">{errors.name}</span>}
       </div>
 
       <div className="form-group">
-        <label htmlFor="phone">Phone Number:</label>
+        <label>Phone</label>
         <input
           type="tel"
-          id="phone"
           name="phone"
           value={formData.phone}
-          onChange={handleChange}
-          placeholder="+1 (555) 000-0000"
+          onChange={handleInputChange}
+          required
         />
-        {errors.phone && <span className="error">{errors.phone}</span>}
       </div>
 
       <div className="form-group">
-        <label htmlFor="email">Email:</label>
+        <label>Email</label>
         <input
           type="email"
-          id="email"
           name="email"
           value={formData.email}
-          onChange={handleChange}
-          placeholder="john@example.com"
+          onChange={handleInputChange}
+          required
         />
-        {errors.email && <span className="error">{errors.email}</span>}
       </div>
 
       <div className="form-group">
-        <label htmlFor="location">Location:</label>
+        <label>Location</label>
         <input
           type="text"
-          id="location"
           name="location"
           value={formData.location}
-          onChange={handleChange}
-          placeholder="City, Country"
+          onChange={handleInputChange}
+          required
         />
-        {errors.location && <span className="error">{errors.location}</span>}
       </div>
 
       <div className="form-group">
-        <label>Technical Skills:</label>
+        <label>GitHub Profile (Optional)</label>
+        <input
+          type="url"
+          name="github"
+          value={formData.github}
+          onChange={handleInputChange}
+          placeholder="https://github.com/username"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Technical Skills</label>
         {formData.technicalSkills.map((skill, index) => (
           <div key={index} className="list-item">
             <input
               type="text"
               value={skill}
-              onChange={(e) => handleListChange('technicalSkills', index, null, e.target.value)}
-              placeholder="Enter technical skill"
+              onChange={(e) => handleListChange(index, e.target.value, 'technicalSkills')}
+              required
             />
-            <button
-              type="button"
-              onClick={() => handleRemoveItem('technicalSkills', index)}
-              className="remove-button"
-            >
-              Remove
-            </button>
+            <button type="button" onClick={() => removeListItem(index, 'technicalSkills')}>Remove</button>
           </div>
         ))}
-        <button
-          type="button"
-          onClick={() => handleAddItem('technicalSkills')}
-          className="add-button"
-        >
-          Add Technical Skill
-        </button>
+        <button type="button" onClick={() => addListItem('technicalSkills')}>Add Skill</button>
       </div>
 
-      {['educations', 'certifications', 'achievements'].map((field) => (
-        <div key={field} className="form-group">
-          <label>{field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}:</label>
-          {formData[field].map((item, index) => (
-            <div key={index} className="list-item-with-description">
-              <div className="list-item-header">
-                <input
-                  type="text"
-                  value={item.title}
-                  onChange={(e) => handleListChange(field, index, 'title', e.target.value)}
-                  placeholder={`Enter ${field.slice(0, -1)} title`}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveItem(field, index)}
-                  className="remove-button"
-                >
-                  Remove
-                </button>
-              </div>
-              {renderDescriptionField(field, index, item)}
+      <div className="form-group">
+        <label>Education</label>
+        {formData.educations.map((edu, index) => (
+          <div key={index} className="list-item">
+            <input
+              type="text"
+              value={edu.title}
+              onChange={(e) => handleTitleChange(index, e.target.value, 'educations')}
+              placeholder="Degree/Program"
+              required
+            />
+            <div className="description-field">
+              {edu.descriptions.map((desc, descIndex) => (
+                <div key={descIndex} className="description-input-group">
+                  <textarea
+                    value={desc}
+                    onChange={(e) => handleDescriptionChange(index, descIndex, e.target.value, 'educations')}
+                    placeholder="Description"
+                    className="description-input"
+                  />
+                  <button type="button" onClick={() => removeDescription(index, descIndex, 'educations')}>Remove</button>
+                </div>
+              ))}
+              <button type="button" onClick={() => addDescription(index, 'educations')}>Add Description</button>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => handleAddItem(field)}
-            className="add-button"
-          >
-            Add {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
-          </button>
-        </div>
-      ))}
+            <button type="button" onClick={() => removeListItem(index, 'educations')}>Remove</button>
+          </div>
+        ))}
+        <button type="button" onClick={() => addListItem('educations')}>Add Education</button>
+      </div>
+
+      <div className="form-group">
+        <label>Certifications</label>
+        {formData.certifications.map((cert, index) => (
+          <div key={index} className="list-item">
+            <input
+              type="text"
+              value={cert.title}
+              onChange={(e) => handleTitleChange(index, e.target.value, 'certifications')}
+              placeholder="Certification Name"
+              required
+            />
+            <div className="description-field">
+              {cert.descriptions.map((desc, descIndex) => (
+                <div key={descIndex} className="description-input-group">
+                  <textarea
+                    value={desc}
+                    onChange={(e) => handleDescriptionChange(index, descIndex, e.target.value, 'certifications')}
+                    placeholder="Description"
+                    className="description-input"
+                  />
+                  <button type="button" onClick={() => removeDescription(index, descIndex, 'certifications')}>Remove</button>
+                </div>
+              ))}
+              <button type="button" onClick={() => addDescription(index, 'certifications')}>Add Description</button>
+            </div>
+            <button type="button" onClick={() => removeListItem(index, 'certifications')}>Remove</button>
+          </div>
+        ))}
+        <button type="button" onClick={() => addListItem('certifications')}>Add Certification</button>
+      </div>
+
+      <div className="form-group">
+        <label>Achievements</label>
+        {formData.achievements.map((ach, index) => (
+          <div key={index} className="list-item">
+            <input
+              type="text"
+              value={ach.title}
+              onChange={(e) => handleTitleChange(index, e.target.value, 'achievements')}
+              placeholder="Achievement Title"
+              required
+            />
+            <div className="description-field">
+              {ach.descriptions.map((desc, descIndex) => (
+                <div key={descIndex} className="description-input-group">
+                  <textarea
+                    value={desc}
+                    onChange={(e) => handleDescriptionChange(index, descIndex, e.target.value, 'achievements')}
+                    placeholder="Description"
+                    className="description-input"
+                  />
+                  <button type="button" onClick={() => removeDescription(index, descIndex, 'achievements')}>Remove</button>
+                </div>
+              ))}
+              <button type="button" onClick={() => addDescription(index, 'achievements')}>Add Description</button>
+            </div>
+            <button type="button" onClick={() => removeListItem(index, 'achievements')}>Remove</button>
+          </div>
+        ))}
+        <button type="button" onClick={() => addListItem('achievements')}>Add Achievement</button>
+      </div>
+
+      <button type="submit" className="submit-button">Generate CV</button>
     </form>
   );
 };
