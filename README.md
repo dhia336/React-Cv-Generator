@@ -50,6 +50,11 @@ yarn start
 
 The application will be available at `http://localhost:3000`
 
+### Hosted Version
+
+You can access the hosted version of the application at:  
+**[React CV Generator](https://react-cv-generator-eight.vercel.app/)**
+
 ## Usage
 
 ### Creating a CV
@@ -148,4 +153,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - React team for the amazing framework
 - jsPDF for PDF generation capabilities
-- All contributors who have helped improve the project
